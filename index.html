@@ -1,0 +1,139 @@
+<html>
+<head>
+      <script src = https://cdn.bootcss.com/jquery/3.2.0/jquery.js></script>
+  <style>
+      *{
+          padding: 0;
+          margin: 0;
+      }
+      .layout{
+          width: 320px;
+          height: 180px;
+          overflow: hidden;
+      }
+      ul li{
+          list-style: none;
+      }
+      a{
+          text-decoration: none;
+          width: 30px;
+          height: 30px;
+          border: 1px solid black;
+          border-radius: 50%;
+          text-align: center;
+          color: black;
+          background-color: #f1f1f1;
+          line-height: 27px;
+      }
+      img{
+          width: 320px;
+          height: 180px;
+      }
+      li{
+          float: left;
+      }
+      .content{
+          position: relative;
+          width: 1280px;
+      }
+      .pre-arrow{
+          float: left;
+      }
+      .aft-arrow{
+          float: right;
+      }
+      .arrow{
+          position: relative;
+          top: -110px;
+          margin: 0 10px;
+      }
+      .scrollbar>li{
+          height: 6px;
+          width: 30px;
+          border: 1px solid black;
+          margin: 0 7px;
+          border-radius: 3px;
+          position: relative;
+          top: -20px;
+          right: -10px;
+          opacity: 0.6;
+      }
+      .active{
+          background-color: black;
+      }
+      .content:after{
+          content: '';
+          display: block;
+          clear: both;
+      }
+
+  </style>
+</head>
+<body>
+    <div class = 'layout'>
+        <ul class = 'content'>
+            <li data-id = "0"><img src = "http://cdn.jirengu.com/book.jirengu.com/img/2.jpg"></li>
+            <li data-id = "1"><img src = "http://cdn.jirengu.com/book.jirengu.com/img/3.jpg"></li>
+            <li data-id = "2"><img src = "http://cdn.jirengu.com/book.jirengu.com/img/4.jpg"></li>
+            <li data-id = "3"><img src = "http://cdn.jirengu.com/book.jirengu.com/img/5.jpg"></li>            
+        </ul>
+        <span><a href = '#' class = 'pre-arrow arrow'><</a></span>
+        <span><a href = '#' class = 'aft-arrow arrow'>></a></span>
+        <div class = 'footbar'>
+            <ul class = 'scrollbar'>
+                <li class = 'signal active'></li>
+                <li class = 'signal'></li>
+                <li class = 'signal'></li>
+                <li class = 'signal'></li>
+            </ul>
+        </div>
+    </div>
+</body>
+  <script>
+      var $nextBtn = $('.aft-arrow');
+      var $preBtn = $('.pre-arrow');
+      var $signalBtn = $('.signal');
+      var $item = $('.content> li> img');
+      var totalCount = $('img').length;
+      var animateStatus = false;
+      var currentIndex = 0;
+      $nextBtn.on('click', function(){
+          playNext();
+      })
+      $preBtn.on('click', function(){
+          playPrevious();
+      })
+      $signalBtn.on('click', function(){
+          var index = $(this).index();
+          play(index);
+      })
+      autoPlay();
+
+      function playNext(){
+          play((currentIndex + 1)%totalCount);
+      }
+      function playPrevious(){
+          play((totalCount + currentIndex - 1)%totalCount);
+      }
+
+      function play(index){
+          if( animateStatus === true) return;
+          animateStatus = true;
+          $item.eq(currentIndex).fadeOut(500);
+          $item.eq(index).fadeIn(500,function(){
+              animateStatus = false;
+          });
+          currentIndex = index;
+          setFootbar();
+      }
+
+      function setFootbar(){
+          $('.signal').removeClass('active').eq(currentIndex).addClass('active');
+      }
+      function autoPlay(){
+          clock = setInterval(function(){
+              playNext();
+          }, 2000)
+      }
+  </script>
+</html>
